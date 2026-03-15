@@ -25,9 +25,10 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Studio Echelle — Luxury Interior Design & Architecture',
+  title: 'Studio Échelle — Luxury Interior Design & Architecture',
   description:
     'High-end interior design and architecture studio based in Doha, Qatar. Specialising in luxury residential villas, commercial projects, and landscape design across the GCC.',
+  metadataBase: new URL('https://studioechelle.com'),
 };
 
 export default async function LocaleLayout({
@@ -50,6 +51,7 @@ export default async function LocaleLayout({
       lang={locale}
       dir={locale === 'ar' ? 'rtl' : 'ltr'}
       className={`${cormorant.variable} ${dmSans.variable}`}
+      suppressHydrationWarning
     >
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
