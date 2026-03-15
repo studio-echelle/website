@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "title": "Studio Echelle — Luxury Interior Design & Architecture",
+    "description": "High-end interior design and architecture studio based in Doha, Qatar. Specialising in luxury residential villas, commercial projects, and landscape design across the GCC."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "services": "Services",
+    "contact": "Contact"
+  },
+  "common": {
+    "viewProject": "View Project",
+    "getInTouch": "Get in Touch",
+    "allRightsReserved": "All rights reserved"
+  }
+}
