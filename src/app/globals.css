@@ -5,7 +5,8 @@
 :root {
   --color-bg: #F5F2ED;
   --color-fg: #0E0E0C;
-  --color-accent: #B8935A;
+  --color-accent: #8B3A2A;
+  --color-accent-hover: #C4614A;
   --color-mid: #8C8880;
   --color-dark: #111110;
   --color-surface: #EDEAE4;
@@ -37,6 +38,7 @@
   --color-bg: var(--color-bg);
   --color-fg: var(--color-fg);
   --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
   --color-mid: var(--color-mid);
   --color-dark: var(--color-dark);
   --color-surface: var(--color-surface);
