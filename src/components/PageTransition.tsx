@@ -10,18 +10,25 @@ export function PageTransition() {
     const overlay = overlayRef.current;
     if (!overlay) return;
 
-    // Exit animation: reveal the page (scaleY 1 → 0 from top)
-    gsap.fromTo(
-      overlay,
-      { scaleY: 1, transformOrigin: 'top' },
-      {
+    const ctx = gsap.context(() => {
+      // Page-load reveal: curtain retracts upward
+      gsap.set(overlay, { scaleY: 1, transformOrigin: 'top' });
+      gsap.to(overlay, {
         scaleY: 0,
-        duration: 0.5,
-        ease: 'power2.inOut',
-        delay: 0.1,
-      },
-    );
+        duration: 0.6,
+        ease: 'cubic-bezier(0.76, 0, 0.24, 1)',
+        delay: 0.15,
+      });
+    });
+
+    return () => ctx.revert();
   }, []);
 
-  return <div ref={overlayRef} className="page-transition" />;
+  return (
+    <div
+      ref={overlayRef}
+      className="page-transition"
+      aria-hidden="true"
+    />
+  );
 }
