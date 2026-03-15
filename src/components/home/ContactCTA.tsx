@@ -33,11 +33,12 @@ export function ContactCTA() {
   return (
     <section
       ref={sectionRef}
-      className="bg-[var(--color-accent)] text-[var(--color-bg)] py-24 lg:py-32"
+      className="bg-[var(--color-accent)] text-[var(--color-bg)]"
+      style={{ paddingBlock: 'var(--section-py)' }}
     >
       <div ref={contentRef} className="container text-center">
         <h2 className="text-display max-w-3xl mx-auto">{t('heading')}</h2>
-        <div className="mt-10 lg:mt-12">
+        <div className="mt-12 lg:mt-14">
           <Link
             href="/contact"
             className="inline-block text-label border border-[var(--color-bg)]/50 px-10 py-4 hover:bg-[var(--color-bg)] hover:text-[var(--color-accent)] transition-all duration-500"

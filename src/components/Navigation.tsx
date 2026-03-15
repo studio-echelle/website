@@ -50,7 +50,7 @@ export function Navigation() {
             : ''
         }`}
       >
-        <div className="container flex items-center justify-between h-20 lg:h-24">
+        <div className="container flex items-center justify-between h-20 lg:h-[80px]">
           {/* Wordmark */}
           <Link href="/" className="relative z-50" onClick={closeMenu}>
             <span

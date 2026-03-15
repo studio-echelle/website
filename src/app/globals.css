@@ -11,16 +11,18 @@
   --color-dark: #111110;
   --color-surface: #EDEAE4;
   --color-border: #D9D5CE;
+  --color-divider: #1a1a18;
 
   --font-display: var(--font-cormorant-garamond);
   --font-body: var(--font-dm-sans);
 
-  --size-hero: clamp(72px, 8vw, 120px);
-  --size-display: clamp(48px, 5vw, 72px);
-  --size-heading: clamp(28px, 3vw, 40px);
-  --size-subheading: 20px;
-  --size-body: 16px;
-  --size-small: 13px;
+  /* Type scale — 20% uplift from base */
+  --size-hero: clamp(86px, 10vw, 144px);
+  --size-display: clamp(58px, 6vw, 86px);
+  --size-heading: clamp(34px, 3.6vw, 48px);
+  --size-subheading: 24px;
+  --size-body: 19px;
+  --size-small: 16px;
   --size-label: 11px;
 
   --tracking-display: 0.02em;
@@ -28,6 +30,9 @@
 
   --gutter: 24px;
   --max-width: 1440px;
+
+  /* Section spacing */
+  --section-py: clamp(80px, 10vw, 140px);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-cursor: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -43,6 +48,7 @@
   --color-dark: var(--color-dark);
   --color-surface: var(--color-surface);
   --color-border: var(--color-border);
+  --color-divider: var(--color-divider);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
 }
@@ -66,7 +72,7 @@ body {
   color: var(--color-fg);
   font-family: var(--font-body), sans-serif;
   font-size: var(--size-body);
-  line-height: 1.6;
+  line-height: 1.8;
   overflow-x: hidden;
 }
 
@@ -90,7 +96,7 @@ body {
   font-size: var(--size-display);
   font-weight: 300;
   letter-spacing: var(--tracking-display);
-  line-height: 1.1;
+  line-height: 1.2;
 }
 
 .text-heading {
@@ -103,12 +109,12 @@ body {
 .text-subheading {
   font-size: var(--size-subheading);
   font-weight: 400;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .text-small {
   font-size: var(--size-small);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .text-label {
@@ -125,6 +131,14 @@ body {
   max-width: var(--max-width);
   margin: 0 auto;
   padding-inline: var(--gutter);
+}
+
+/* ——— Section divider ——— */
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--color-divider);
 }
 
 /* ——— Smooth scroll body (Lenis) ——— */

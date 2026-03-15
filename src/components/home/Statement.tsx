@@ -30,7 +30,6 @@ export function Statement() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Manifesto text reveal
       gsap.from(manifestoRef.current, {
         y: 60,
         opacity: 0,
@@ -53,7 +52,6 @@ export function Statement() {
         },
       });
 
-      // Animated counters
       counterRefs.current.forEach((el, i) => {
         if (!el) return;
         const target = { val: 0 };
@@ -80,27 +78,49 @@ export function Statement() {
   return (
     <section
       ref={sectionRef}
-      className="bg-[var(--color-dark)] text-[var(--color-bg)] py-24 lg:py-40"
+      className="bg-[var(--color-dark)] text-[var(--color-bg)]"
+      style={{ paddingBlock: 'var(--section-py)' }}
     >
       <div className="container">
         {/* Manifesto */}
-        <div className="max-w-4xl mx-auto text-center mb-20 lg:mb-32">
-          <h2 ref={manifestoRef} className="text-display">
+        <div className="max-w-5xl mx-auto text-center mb-24 lg:mb-36">
+          <h2
+            ref={manifestoRef}
+            style={{
+              fontFamily: 'var(--font-display), serif',
+              fontWeight: 300,
+              fontSize: 'clamp(36px, 4vw, 64px)',
+              lineHeight: 1.2,
+              letterSpacing: '0.01em',
+            }}
+          >
             {t('manifesto')}
           </h2>
           <p
             ref={extendedRef}
-            className="mt-6 lg:mt-8 text-[17px] lg:text-[19px] leading-relaxed text-[var(--color-mid)] max-w-2xl mx-auto"
+            className="mt-8 lg:mt-10 text-[var(--color-mid)] max-w-2xl mx-auto"
+            style={{
+              fontSize: 'clamp(17px, 1.4vw, 21px)',
+              lineHeight: 1.8,
+            }}
           >
             {t('extended')}
           </p>
         </div>
 
         {/* Stats grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-8 border-t border-[var(--color-bg)]/10 pt-16 lg:pt-20">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-16 gap-x-8 border-t border-[var(--color-bg)]/10 pt-20 lg:pt-24">
           {STATS.map((stat, i) => (
             <div key={stat.key} className="text-center">
-              <div className="text-hero text-[var(--color-accent)]">
+              <div
+                className="text-[var(--color-accent)]"
+                style={{
+                  fontFamily: 'var(--font-display), serif',
+                  fontWeight: 300,
+                  fontSize: 'clamp(64px, 7vw, 96px)',
+                  lineHeight: 1,
+                }}
+              >
                 <span
                   ref={(el) => {
                     counterRefs.current[i] = el;
@@ -110,7 +130,7 @@ export function Statement() {
                 </span>
                 {stat.suffix}
               </div>
-              <p className="text-label text-[var(--color-mid)] mt-3">
+              <p className="text-[11px] tracking-[0.12em] uppercase font-medium text-[var(--color-mid)] mt-4">
                 {t(`stats.${stat.key}`)}
               </p>
             </div>

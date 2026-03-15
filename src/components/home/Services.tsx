@@ -38,13 +38,14 @@ export function Services() {
   return (
     <section
       ref={sectionRef}
-      className="bg-[var(--color-dark)] text-[var(--color-bg)] py-24 lg:py-36 border-t border-[var(--color-bg)]/10"
+      className="bg-[var(--color-dark)] text-[var(--color-bg)]"
+      style={{ paddingBlock: 'var(--section-py)' }}
     >
       <div className="container">
         {/* Header */}
-        <div className="mb-16 lg:mb-20">
+        <div className="mb-20 lg:mb-24">
           <span className="text-label text-[var(--color-accent)]">{t('label')}</span>
-          <h2 className="text-display mt-4">{t('title')}</h2>
+          <h2 className="text-display mt-5">{t('title')}</h2>
         </div>
 
         {/* Grid */}
@@ -55,19 +56,22 @@ export function Services() {
           {SERVICE_KEYS.map((key, i) => (
             <div
               key={key}
-              className="group relative bg-[var(--color-dark)] p-8 lg:p-12 min-h-[260px] flex flex-col justify-between transition-colors duration-500 hover:bg-[var(--color-fg)]"
+              className="group relative bg-[var(--color-dark)] p-10 lg:p-12 min-h-[280px] lg:min-h-[320px] flex flex-col justify-between transition-colors duration-500 hover:bg-[var(--color-fg)]"
             >
               {/* Number */}
-              <span className="text-label text-[var(--color-accent)]">
+              <span className="text-label text-[var(--color-accent)] mb-auto">
                 {String(i + 1).padStart(2, '0')}
               </span>
 
               {/* Service name */}
-              <div className="mt-auto">
+              <div className="mt-8">
                 <h3 className="text-heading">{t(`${key}.name`)}</h3>
 
                 {/* Description — revealed on hover */}
-                <p className="text-[15px] leading-relaxed text-[var(--color-mid)] mt-3 max-h-0 opacity-0 overflow-hidden transition-all duration-500 group-hover:max-h-32 group-hover:opacity-100">
+                <p
+                  className="text-[var(--color-mid)] mt-4 max-h-0 opacity-0 overflow-hidden transition-all duration-500 group-hover:max-h-40 group-hover:opacity-100"
+                  style={{ fontSize: '16px', lineHeight: 1.7 }}
+                >
                   {t(`${key}.description`)}
                 </p>
               </div>

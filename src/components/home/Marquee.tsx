@@ -14,7 +14,7 @@ function MarqueeTrack() {
       {ITEMS.map((item) => (
         <span key={item} className="flex items-center shrink-0">
           <span
-            className="text-[clamp(14px,1.8vw,20px)] uppercase tracking-[0.15em] text-[var(--color-bg)]/60 whitespace-nowrap px-4 lg:px-6"
+            className="text-[14px] uppercase tracking-[0.18em] text-[var(--color-bg)]/50 whitespace-nowrap px-6 lg:px-10"
             style={{ fontFamily: 'var(--font-body), sans-serif', fontWeight: 500 }}
           >
             {item}
@@ -28,7 +28,7 @@ function MarqueeTrack() {
 
 export function Marquee() {
   return (
-    <section className="bg-[var(--color-dark)] border-y border-[var(--color-bg)]/10 py-5 lg:py-6 overflow-hidden">
+    <section className="bg-[var(--color-dark)] h-[80px] flex items-center overflow-hidden">
       <div className="flex">
         <MarqueeTrack />
         <MarqueeTrack />
