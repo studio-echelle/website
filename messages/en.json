@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Studio Echelle — Luxury Interior Design & Architecture",
+    "title": "Studio Échelle — Luxury Interior Design & Architecture",
     "description": "High-end interior design and architecture studio based in Doha, Qatar. Specialising in luxury residential villas, commercial projects, and landscape design across the GCC."
   },
   "nav": {
@@ -14,5 +14,44 @@
     "viewProject": "View Project",
     "getInTouch": "Get in Touch",
     "allRightsReserved": "All rights reserved"
+  },
+  "hero": {
+    "title": "Designed for Permanence",
+    "tagline": "We design with love, for form, for material, and for the people who live with our work.",
+    "cta": "View Our Work"
+  },
+  "statement": {
+    "manifesto": "Every detail is intentional. Every project, personal.",
+    "extended": "We believe great design quietly transforms space and stirs feeling.",
+    "stats": {
+      "projects": "Projects",
+      "countries": "Countries",
+      "years": "Years",
+      "sqm": "sqm Designed"
+    }
+  },
+  "services": {
+    "label": "What We Do",
+    "title": "Our Services",
+    "interior": {
+      "name": "Interior Design",
+      "description": "Crafting refined residential and commercial interiors that balance material authenticity with spatial harmony."
+    },
+    "architecture": {
+      "name": "Architectural Design",
+      "description": "Shaping structures that resonate with their surroundings through thoughtful form, proportion, and light."
+    },
+    "landscape": {
+      "name": "Landscape Design",
+      "description": "Extending living spaces outward with considered planting, hardscape, and seamless indoor-outdoor transitions."
+    },
+    "fitout": {
+      "name": "Fit-Out Supervision",
+      "description": "Overseeing every detail of execution to ensure design intent is faithfully realised on site."
+    }
+  },
+  "cta": {
+    "heading": "Ready to start a conversation?",
+    "button": "Get in Touch"
   }
 }

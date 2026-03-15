@@ -209,6 +209,13 @@ html.lenis, html.lenis body {
   }
 }
 
+/* ——— Scroll indicator ——— */
+
+@keyframes scrollLine {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
 /* ——— Line reveal animation helper ——— */
 
 .line-reveal {
