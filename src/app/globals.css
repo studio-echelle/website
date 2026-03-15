@@ -1,26 +1,218 @@
 @import "tailwindcss";
 
+/* ——— Design System: Studio Echelle ——— */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-bg: #F5F2ED;
+  --color-fg: #0E0E0C;
+  --color-accent: #B8935A;
+  --color-mid: #8C8880;
+  --color-dark: #111110;
+  --color-surface: #EDEAE4;
+  --color-border: #D9D5CE;
+
+  --font-display: var(--font-cormorant-garamond);
+  --font-body: var(--font-dm-sans);
+
+  --size-hero: clamp(72px, 8vw, 120px);
+  --size-display: clamp(48px, 5vw, 72px);
+  --size-heading: clamp(28px, 3vw, 40px);
+  --size-subheading: 20px;
+  --size-body: 16px;
+  --size-small: 13px;
+  --size-label: 11px;
+
+  --tracking-display: 0.02em;
+  --tracking-label: 0.12em;
+
+  --gutter: 24px;
+  --max-width: 1440px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-cursor: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-transition: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--color-bg);
+  --color-fg: var(--color-fg);
+  --color-accent: var(--color-accent);
+  --color-mid: var(--color-mid);
+  --color-dark: var(--color-dark);
+  --color-surface: var(--color-surface);
+  --color-border: var(--color-border);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ——— Base ——— */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body), sans-serif;
+  font-size: var(--size-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* ——— Typography utilities ——— */
+
+.text-hero {
+  font-family: var(--font-display), serif;
+  font-size: var(--size-hero);
+  font-weight: 300;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.05;
+}
+
+.text-display {
+  font-family: var(--font-display), serif;
+  font-size: var(--size-display);
+  font-weight: 300;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.1;
+}
+
+.text-heading {
+  font-family: var(--font-display), serif;
+  font-size: var(--size-heading);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.text-subheading {
+  font-size: var(--size-subheading);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.text-small {
+  font-size: var(--size-small);
+  line-height: 1.5;
+}
+
+.text-label {
+  font-size: var(--size-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+}
+
+/* ——— Layout ——— */
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+/* ——— Smooth scroll body (Lenis) ——— */
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ——— Page transition overlay ——— */
+
+.page-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--color-fg);
+  transform-origin: bottom;
+  transform: scaleY(0);
+  pointer-events: none;
+}
+
+/* ——— Custom cursor ——— */
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--color-fg);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: width 0.3s var(--ease-cursor),
+              height 0.3s var(--ease-cursor),
+              background 0.3s var(--ease-cursor),
+              border-color 0.3s var(--ease-cursor),
+              transform 0.3s var(--ease-cursor);
+  transform: translate(-50%, -50%);
+}
+
+.custom-cursor.is-hovering {
+  width: 64px;
+  height: 64px;
+  background: var(--color-fg);
+  border-color: var(--color-fg);
+}
+
+.custom-cursor-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: var(--size-label);
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-cursor);
+}
+
+.custom-cursor.is-hovering .custom-cursor-label {
+  opacity: 1;
+}
+
+/* Hide custom cursor on touch devices */
+@media (pointer: coarse) {
+  .custom-cursor {
+    display: none !important;
+  }
+}
+
+/* ——— Line reveal animation helper ——— */
+
+.line-reveal {
+  overflow: hidden;
+}
+
+.line-reveal .line-inner {
+  display: block;
 }
