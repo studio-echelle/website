@@ -216,6 +216,13 @@ html.lenis, html.lenis body {
   100% { transform: translateY(200%); }
 }
 
+/* ——— Marquee ——— */
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
 /* ——— Line reveal animation helper ——— */
 
 .line-reveal {
