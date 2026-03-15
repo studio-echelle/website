@@ -1,31 +1,51 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 export function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const pos = useRef({ x: 0, y: 0 });
-  const visible = useRef(false);
+  const mouse = useRef({ x: -100, y: -100 });
+  const rendered = useRef({ x: -100, y: -100 });
+  const rafId = useRef<number>(0);
+
+  const render = useCallback(() => {
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+
+    // Lerp for smooth trailing
+    const lerp = 0.15;
+    rendered.current.x += (mouse.current.x - rendered.current.x) * lerp;
+    rendered.current.y += (mouse.current.y - rendered.current.y) * lerp;
+
+    cursor.style.transform = `translate3d(${rendered.current.x}px, ${rendered.current.y}px, 0) translate(-50%, -50%)`;
+
+    rafId.current = requestAnimationFrame(render);
+  }, []);
 
   useEffect(() => {
     const cursor = cursorRef.current;
     if (!cursor) return;
 
-    // Hide until first move
+    // Detect touch — bail entirely
+    if (window.matchMedia('(pointer: coarse)').matches) {
+      cursor.style.display = 'none';
+      return;
+    }
+
     cursor.style.opacity = '0';
 
     function onMouseMove(e: MouseEvent) {
-      pos.current = { x: e.clientX, y: e.clientY };
-      if (cursor) {
-        cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-        if (!visible.current) {
-          cursor.style.opacity = '1';
-          visible.current = true;
-        }
+      mouse.current = { x: e.clientX, y: e.clientY };
+      if (cursor && cursor.style.opacity === '0') {
+        cursor.style.opacity = '1';
       }
     }
 
-    function onMouseEnterHoverable() {
+    function onMouseEnterHoverable(e: Event) {
+      const el = e.currentTarget as HTMLElement;
+      const label = el.dataset.cursor || 'view';
+      const labelEl = cursor?.querySelector('.custom-cursor-label');
+      if (labelEl) labelEl.textContent = label.toUpperCase();
       cursor?.classList.add('is-hovering');
     }
 
@@ -33,35 +53,35 @@ export function CustomCursor() {
       cursor?.classList.remove('is-hovering');
     }
 
-    document.addEventListener('mousemove', onMouseMove);
-
-    // Observe DOM for [data-cursor="view"] elements
-    const observer = new MutationObserver(() => {
-      const hoverables = document.querySelectorAll('[data-cursor="view"]');
-      hoverables.forEach((el) => {
+    function bindHoverables() {
+      document.querySelectorAll('[data-cursor]').forEach((el) => {
+        el.removeEventListener('mouseenter', onMouseEnterHoverable);
+        el.removeEventListener('mouseleave', onMouseLeaveHoverable);
         el.addEventListener('mouseenter', onMouseEnterHoverable);
         el.addEventListener('mouseleave', onMouseLeaveHoverable);
       });
-    });
+    }
 
+    document.addEventListener('mousemove', onMouseMove);
+
+    // Re-bind on DOM changes
+    const observer = new MutationObserver(bindHoverables);
     observer.observe(document.body, { childList: true, subtree: true });
+    bindHoverables();
 
-    // Initial bind
-    const hoverables = document.querySelectorAll('[data-cursor="view"]');
-    hoverables.forEach((el) => {
-      el.addEventListener('mouseenter', onMouseEnterHoverable);
-      el.addEventListener('mouseleave', onMouseLeaveHoverable);
-    });
+    // Start render loop
+    rafId.current = requestAnimationFrame(render);
 
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
       observer.disconnect();
+      cancelAnimationFrame(rafId.current);
     };
-  }, []);
+  }, [render]);
 
   return (
     <div ref={cursorRef} className="custom-cursor">
-      <span className="custom-cursor-label">View</span>
+      <span className="custom-cursor-label">VIEW</span>
     </div>
   );
 }
