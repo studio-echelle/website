@@ -44,17 +44,18 @@ export function Navigation() {
   return (
     <>
       <header
-        className={`fixed top-0 inset-x-0 z-40 transition-[background-color,backdrop-filter] duration-500 ${
+        className={`fixed top-0 inset-x-0 z-40 transition-[background-color,backdrop-filter] duration-500 border-b border-white/[0.08] ${
           scrolled
-            ? 'bg-[var(--color-bg)]/90 backdrop-blur-md shadow-[0_1px_0_var(--color-border)]'
+            ? 'bg-[var(--color-fg)]/80 backdrop-blur-md'
             : ''
         }`}
       >
-        <div className="container flex items-center justify-between h-20 lg:h-[80px]">
-          {/* Wordmark */}
-          <Link href="/" className="relative z-50" onClick={closeMenu}>
+        <div className="container flex items-center justify-between h-[80px]">
+          {/* Wordmark with terracotta dot */}
+          <Link href="/" className="relative z-50 flex items-center gap-2.5" onClick={closeMenu}>
+            <span className="w-[4px] h-[4px] rounded-full bg-[var(--color-accent)] shrink-0" />
             <span
-              className="text-[18px] lg:text-[22px] tracking-[0.1em] uppercase"
+              className="text-[18px] lg:text-[20px] tracking-[0.1em] uppercase text-[var(--color-bg)]"
               style={{ fontFamily: 'var(--font-display), serif', fontWeight: 300 }}
             >
               Studio Échelle
@@ -67,7 +68,7 @@ export function Navigation() {
               <Link
                 key={key}
                 href={href}
-                className="text-label text-[var(--color-fg)] hover:text-[var(--color-accent)] transition-colors duration-300 relative after:absolute after:bottom-[-4px] after:left-0 after:h-px after:bg-[var(--color-accent)] after:transition-[width] after:duration-300 after:w-0 hover:after:w-full"
+                className="text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--color-bg)]/60 hover:text-[var(--color-bg)] transition-colors duration-300 relative after:absolute after:bottom-[-4px] after:left-0 after:h-px after:bg-[var(--color-accent)] after:transition-[width] after:duration-300 after:w-0 hover:after:w-full"
               >
                 {t(key)}
               </Link>
@@ -76,7 +77,7 @@ export function Navigation() {
             {/* Language toggle */}
             <button
               onClick={switchLocale}
-              className="text-label text-[var(--color-mid)] hover:text-[var(--color-fg)] transition-colors duration-300 ms-2"
+              className="text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--color-mid)] hover:text-[var(--color-bg)] transition-colors duration-300 ms-2"
               aria-label={locale === 'en' ? 'Switch to Arabic' : 'Switch to English'}
             >
               {locale === 'en' ? 'عربي' : 'EN'}
@@ -91,12 +92,12 @@ export function Navigation() {
             aria-expanded={menuOpen}
           >
             <span
-              className={`block w-6 h-[1.5px] bg-[var(--color-fg)] transition-all duration-300 origin-center ${
+              className={`block w-6 h-[1.5px] bg-[var(--color-bg)] transition-all duration-300 origin-center ${
                 menuOpen ? 'rotate-45 translate-y-[3.75px]' : ''
               }`}
             />
             <span
-              className={`block w-6 h-[1.5px] bg-[var(--color-fg)] transition-all duration-300 origin-center ${
+              className={`block w-6 h-[1.5px] bg-[var(--color-bg)] transition-all duration-300 origin-center ${
                 menuOpen ? '-rotate-45 -translate-y-[3.75px]' : ''
               }`}
             />
@@ -106,7 +107,7 @@ export function Navigation() {
 
       {/* Mobile overlay */}
       <div
-        className={`fixed inset-0 z-30 bg-[var(--color-bg)] transition-opacity duration-500 lg:hidden ${
+        className={`fixed inset-0 z-30 bg-[var(--color-fg)] transition-opacity duration-500 lg:hidden ${
           menuOpen
             ? 'opacity-100 pointer-events-auto'
             : 'opacity-0 pointer-events-none'
@@ -119,7 +120,7 @@ export function Navigation() {
               <Link
                 key={key}
                 href={href}
-                className="text-display text-[var(--color-fg)] hover:text-[var(--color-accent)] transition-colors duration-300"
+                className="text-display text-[var(--color-bg)] hover:text-[var(--color-accent)] transition-colors duration-300"
                 onClick={closeMenu}
               >
                 {t(key)}
@@ -132,7 +133,7 @@ export function Navigation() {
               switchLocale();
               closeMenu();
             }}
-            className="text-label text-[var(--color-mid)] hover:text-[var(--color-fg)] transition-colors duration-300 mt-4"
+            className="text-label text-[var(--color-mid)] hover:text-[var(--color-bg)] transition-colors duration-300 mt-4"
           >
             {locale === 'en' ? 'عربي' : 'English'}
           </button>

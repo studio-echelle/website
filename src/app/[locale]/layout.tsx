@@ -8,6 +8,7 @@ import { CustomCursor } from '@/components/CustomCursor';
 import { PageTransition } from '@/components/PageTransition';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
+import { GridOverlay } from '@/components/GridOverlay';
 import '../globals.css';
 
 const cormorant = Cormorant_Garamond({
@@ -56,6 +57,7 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <LenisProvider>
+            <GridOverlay />
             <CustomCursor />
             <PageTransition />
             <Navigation />
