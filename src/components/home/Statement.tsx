@@ -21,25 +21,45 @@ function formatNumber(n: number): string {
   return String(n);
 }
 
+function SplitWords({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
+  const words = text.split(' ');
+  return (
+    <span className={className} style={style}>
+      {words.map((word, i) => (
+        <span key={i} className="inline-block overflow-hidden align-top">
+          <span className="manifesto-word inline-block">
+            {word}
+          </span>
+          {i < words.length - 1 && '\u00A0'}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 export function Statement() {
   const t = useTranslations('statement');
   const sectionRef = useRef<HTMLElement>(null);
-  const manifestoRef = useRef<HTMLHeadingElement>(null);
+  const manifestoRef = useRef<HTMLDivElement>(null);
   const extendedRef = useRef<HTMLParagraphElement>(null);
   const counterRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(manifestoRef.current, {
-        y: 60,
-        opacity: 0,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: manifestoRef.current,
-          start: 'top 80%',
-        },
-      });
+      // Word-by-word reveal for manifesto
+      const words = manifestoRef.current?.querySelectorAll('.manifesto-word');
+      if (words && words.length > 0) {
+        gsap.from(words, {
+          yPercent: 100,
+          stagger: 0.04,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: manifestoRef.current,
+            start: 'top 70%',
+          },
+        });
+      }
 
       gsap.from(extendedRef.current, {
         y: 40,
@@ -84,17 +104,17 @@ export function Statement() {
       <div className="container">
         {/* Manifesto */}
         <div className="max-w-5xl mx-auto text-center mb-24 lg:mb-36">
-          <h2
-            ref={manifestoRef}
-            style={{
-              fontFamily: 'var(--font-display), serif',
-              fontWeight: 300,
-              fontSize: 'clamp(36px, 4vw, 64px)',
-              lineHeight: 1.2,
-              letterSpacing: '0.01em',
-            }}
-          >
-            {t('manifesto')}
+          <h2 ref={manifestoRef}>
+            <SplitWords
+              text={t('manifesto')}
+              style={{
+                fontFamily: 'var(--font-display), serif',
+                fontWeight: 300,
+                fontSize: 'clamp(36px, 4vw, 64px)',
+                lineHeight: 1.2,
+                letterSpacing: '0.01em',
+              }}
+            />
           </h2>
           <p
             ref={extendedRef}

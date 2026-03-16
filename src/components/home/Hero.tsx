@@ -7,26 +7,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Scattered letter positions — hand-balanced across the left panel
-const SCATTERED_LETTERS = [
-  { char: 'É', top: '8%', left: '12%', size: 180, rotate: -6 },
-  { char: 'C', top: '22%', left: '55%', size: 140, rotate: 3 },
-  { char: 'H', top: '45%', left: '25%', size: 200, rotate: -2 },
-  { char: 'E', top: '35%', left: '72%', size: 160, rotate: 5 },
-  { char: 'L', top: '62%', left: '48%', size: 190, rotate: -4 },
-  { char: 'L', top: '70%', left: '10%', size: 150, rotate: 7 },
-  { char: 'E', top: '82%', left: '65%', size: 220, rotate: -3 },
-];
-
-function seededRandom(seed: number) {
-  const x = Math.sin(seed) * 10000;
-  return x - Math.floor(x);
-}
-
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const leftPanelRef = useRef<HTMLDivElement>(null);
-  const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const outerCircleRef = useRef<HTMLDivElement>(null);
+  const innerCircleRef = useRef<HTMLDivElement>(null);
+  const pulseRectRef = useRef<HTMLDivElement>(null);
   const studioRef = useRef<HTMLSpanElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLSpanElement>(null);
@@ -54,42 +39,28 @@ export function Hero() {
         );
       });
 
-      // Scattered letters entrance — stagger in
-      letterRefs.current.forEach((el, i) => {
-        if (!el) return;
-        tl.from(
-          el,
-          {
-            opacity: 0,
-            scale: 0.8,
-            duration: 0.8,
-            ease: 'power2.out',
-          },
-          0.8 + i * 0.08,
-        );
-
-        // Floating yoyo animation per letter
-        const seed = i + 1;
-        gsap.to(el, {
-          y: (seededRandom(seed * 3) - 0.5) * 60,
-          x: (seededRandom(seed * 7) - 0.5) * 30,
-          duration: 4 + seededRandom(seed * 11) * 3,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-          delay: seededRandom(seed * 13) * 2,
-        });
+      // Left panel — rotating circles
+      gsap.to(outerCircleRef.current, {
+        rotation: 360,
+        duration: 120,
+        ease: 'none',
+        repeat: -1,
       });
 
-      // Fade letters on scroll out
-      gsap.to(leftPanelRef.current?.querySelectorAll('.scattered-letter') || [], {
-        opacity: 0,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
+      gsap.to(innerCircleRef.current, {
+        rotation: -360,
+        duration: 80,
+        ease: 'none',
+        repeat: -1,
+      });
+
+      // Pulsing terracotta rectangle
+      gsap.to(pulseRectRef.current, {
+        opacity: 0.15,
+        duration: 3,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
       });
     }, sectionRef);
 
@@ -101,49 +72,99 @@ export function Hero() {
       ref={sectionRef}
       className="relative h-screen min-h-[700px] flex flex-col lg:flex-row overflow-hidden"
     >
-      {/* Left panel — gradient + scattered letters (55%) */}
+      {/* Left panel — architectural composition (55%) */}
       <div
-        ref={leftPanelRef}
         className="relative w-full lg:w-[55%] h-[45vh] lg:h-full overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #0a0a08 0%, #1a1614 50%, #0e0c0a 100%)',
-        }}
+        style={{ background: '#0a0a08' }}
       >
-        {/* Geometric overlay — offset thin rectangle */}
+        {/* Horizontal lines at 25%, 50%, 75% */}
+        <div className="absolute w-full h-px top-1/4" style={{ background: 'rgba(255,255,255,0.03)' }} />
+        <div className="absolute w-full h-px top-1/2" style={{ background: 'rgba(255,255,255,0.03)' }} />
+        <div className="absolute w-full h-px top-3/4" style={{ background: 'rgba(255,255,255,0.03)' }} />
+
+        {/* Diagonal line — top-right to bottom-left */}
         <div
           className="absolute hidden lg:block"
           style={{
-            width: '60%',
-            height: '70%',
-            top: '12%',
-            left: '22%',
-            border: '1px solid rgba(255,255,255,0.06)',
-            transform: 'rotate(2deg)',
+            width: '141%',
+            height: '1px',
+            background: 'rgba(255,255,255,0.06)',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%) rotate(-45deg)',
+            transformOrigin: 'center',
           }}
         />
 
-        {/* Scattered letters */}
-        {SCATTERED_LETTERS.map((letter, i) => (
+        {/* Outer circle — 800px, slowly rotating */}
+        <div
+          ref={outerCircleRef}
+          className="absolute hidden lg:block"
+          style={{
+            width: '800px',
+            height: '800px',
+            borderRadius: '50%',
+            border: '1px solid rgba(255,255,255,0.04)',
+            top: '50%',
+            left: '55%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+
+        {/* Inner circle — 400px, counter-rotating */}
+        <div
+          ref={innerCircleRef}
+          className="absolute hidden lg:block"
+          style={{
+            width: '400px',
+            height: '400px',
+            borderRadius: '50%',
+            border: '1px solid rgba(184,147,90,0.08)',
+            top: '50%',
+            left: '55%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+
+        {/* Bottom-left terracotta rectangle — pulsing */}
+        <div
+          ref={pulseRectRef}
+          className="absolute hidden lg:block"
+          style={{
+            width: '120px',
+            height: '80px',
+            border: '1px solid #8B3A2A',
+            opacity: 0.4,
+            bottom: '80px',
+            left: '60px',
+          }}
+        />
+
+        {/* Vertical text — far left edge */}
+        <div
+          className="absolute hidden lg:flex items-center"
+          style={{
+            left: '20px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            writingMode: 'vertical-rl',
+            rotate: '180deg',
+          }}
+        >
           <span
-            key={`${letter.char}-${i}`}
-            ref={(el) => {
-              letterRefs.current[i] = el;
-            }}
-            className="scattered-letter absolute select-none hidden lg:block"
             style={{
-              top: letter.top,
-              left: letter.left,
-              fontSize: `${letter.size}px`,
-              fontFamily: 'var(--font-display), serif',
-              fontWeight: 300,
-              color: 'rgba(245,242,237,0.12)',
-              lineHeight: 1,
-              transform: `rotate(${letter.rotate}deg)`,
+              fontFamily: 'var(--font-body), sans-serif',
+              fontSize: '10px',
+              fontWeight: 500,
+              letterSpacing: '0.2em',
+              color: 'rgba(140,136,128,0.5)',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
             }}
           >
-            {letter.char}
+            Doha · Qatar · Est. 2019
           </span>
-        ))}
+        </div>
       </div>
 
       {/* Right panel — text content (45%) */}
