@@ -13,12 +13,25 @@
   "common": {
     "viewProject": "View Project",
     "getInTouch": "Get in Touch",
-    "allRightsReserved": "All rights reserved"
+    "allRightsReserved": "All rights reserved",
+    "discoverMore": "Discover More"
   },
   "hero": {
     "title": "Designed for Permanence",
     "tagline": "We design with love, for form, for material, and for the people who live with our work.",
-    "cta": "View Our Work"
+    "cta": "View Our Work",
+    "designStudio": "Design Studio",
+    "viewOurWork": "View Our Work",
+    "architecture": "Architecture",
+    "interior": "Interior",
+    "landscape": "Landscape"
+  },
+  "marquee": {
+    "luxuryResidential": "Luxury Residential",
+    "commercialInteriors": "Commercial Interiors",
+    "landscapeDesign": "Landscape Design",
+    "fitOutSupervision": "Fit-Out Supervision",
+    "gccBeyond": "GCC & Beyond"
   },
   "statement": {
     "manifesto": "Every detail is intentional. Every project, personal.",
@@ -48,10 +61,90 @@
     "fitout": {
       "name": "Fit-Out Supervision",
       "description": "Overseeing every detail of execution to ensure design intent is faithfully realised on site."
+    },
+    "projectManagement": {
+      "name": "Project Management",
+      "description": "End-to-end coordination from tender through handover. Procurement support, contractor management, and programme monitoring."
+    }
+  },
+  "servicesPage": {
+    "title": "What We Do",
+    "subtitle": "From concept to completion, we offer a full spectrum of design services tailored to the unique character of each project.",
+    "s1": {
+      "name": "Interior Design",
+      "description": "Full-scope residential and commercial interiors from concept through delivery. We work across all scales, from intimate apartments to large villa complexes and commercial developments."
+    },
+    "s2": {
+      "name": "Architectural Design",
+      "description": "Spatial planning, façade design, and architectural documentation. We collaborate with structural and MEP engineers to deliver complete, coordinated packages."
+    },
+    "s3": {
+      "name": "Landscape Design",
+      "description": "Outdoor living spaces, gardens, pool surrounds, and landscape masterplans. We extend the interior language into the exterior."
+    },
+    "s4": {
+      "name": "Fit-Out Supervision",
+      "description": "On-site oversight ensuring the design intent is delivered with precision. We attend site regularly, review shop drawings, and coordinate contractors."
+    },
+    "s5": {
+      "name": "Project Management",
+      "description": "End-to-end coordination from tender through handover. Procurement support, contractor management, and programme monitoring."
     }
   },
   "cta": {
     "heading": "Ready to start a conversation?",
     "button": "Get in Touch"
+  },
+  "about": {
+    "studioLabel": "01 — Studio",
+    "heading": "A studio built on the belief that great design endures.",
+    "description": "Échelle is an interior and exterior design firm with expertise in residential, commercial and retail projects. Based in Doha, Qatar, we combine extraordinary talent and global experiences to create spaces, nationally and worldwide, that can be as cutting edge or timeless as the exceptionality of each of our clients.",
+    "established": "Est. 2019, Doha",
+    "teamLabel": "02 — Team",
+    "valuesLabel": "04 — Values",
+    "value1": "We design with intention. Every material, every proportion, every detail is considered.",
+    "value2": "We listen before we design. The best spaces emerge from deep understanding of the people who inhabit them.",
+    "value3": "We build for permanence. Not trends, not moments, but spaces that improve with time."
+  },
+  "contact": {
+    "fullName": "Full Name",
+    "company": "Company",
+    "email": "Email",
+    "phone": "Phone",
+    "projectType": "Project Type",
+    "budgetRange": "Budget Range",
+    "projectLocation": "Project Location",
+    "message": "Message",
+    "select": "Select…",
+    "sendEnquiry": "Send Enquiry",
+    "sending": "Sending…",
+    "thankYou": "Thank you — we'll be in touch within 48 hours.",
+    "officeHours": "Sunday — Thursday, 9am — 6pm AST",
+    "projectTypes": {
+      "residential": "Residential Villa",
+      "commercial": "Commercial",
+      "hospitality": "Hospitality",
+      "landscape": "Landscape",
+      "other": "Other"
+    },
+    "budgetRanges": {
+      "under500k": "Under 500k QAR",
+      "500k1m": "500k–1M QAR",
+      "1m3m": "1M–3M QAR",
+      "3mPlus": "3M+ QAR",
+      "preferNot": "Prefer not to say"
+    }
+  },
+  "projects": {
+    "all": "All",
+    "residential": "Residential",
+    "commercial": "Commercial",
+    "hospitality": "Hospitality",
+    "landscape": "Landscape"
+  },
+  "footer": {
+    "navigate": "Navigate",
+    "contact": "Contact",
+    "tagline": "We design with love, for form, for material, and for the people who live with our work."
   }
 }

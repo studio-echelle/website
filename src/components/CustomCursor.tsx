@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 
 export function CustomCursor() {
+  const [mounted, setMounted] = useState(false);
   const cursorRef = useRef<HTMLDivElement>(null);
   const mouse = useRef({ x: -100, y: -100 });
   const rendered = useRef({ x: -100, y: -100 });
@@ -12,7 +13,6 @@ export function CustomCursor() {
     const cursor = cursorRef.current;
     if (!cursor) return;
 
-    // Lerp for smooth trailing
     const lerp = 0.15;
     rendered.current.x += (mouse.current.x - rendered.current.x) * lerp;
     rendered.current.y += (mouse.current.y - rendered.current.y) * lerp;
@@ -23,6 +23,11 @@ export function CustomCursor() {
   }, []);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const cursor = cursorRef.current;
     if (!cursor) return;
 
@@ -64,12 +69,10 @@ export function CustomCursor() {
 
     document.addEventListener('mousemove', onMouseMove);
 
-    // Re-bind on DOM changes
     const observer = new MutationObserver(bindHoverables);
     observer.observe(document.body, { childList: true, subtree: true });
     bindHoverables();
 
-    // Start render loop
     rafId.current = requestAnimationFrame(render);
 
     return () => {
@@ -77,7 +80,10 @@ export function CustomCursor() {
       observer.disconnect();
       cancelAnimationFrame(rafId.current);
     };
-  }, [render]);
+  }, [mounted, render]);
+
+  // Return null during SSR / before mount — no DOM to mismatch
+  if (!mounted) return null;
 
   return (
     <div ref={cursorRef} className="custom-cursor">

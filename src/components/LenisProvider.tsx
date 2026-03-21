@@ -1,38 +1,16 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import Lenis from '@studio-freight/lenis';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect } from 'react';
+import { loadGsap } from '@/lib/gsap';
 
-gsap.registerPlugin(ScrollTrigger);
-
+/**
+ * Initialises GSAP + ScrollTrigger globally.
+ * Lenis removed — was causing crashes after tab idle + client-side navigation.
+ * Native CSS smooth scroll via scroll-behavior handles the UX.
+ */
 export function LenisProvider({ children }: { children: React.ReactNode }) {
-  const lenisRef = useRef<Lenis | null>(null);
-
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    });
-
-    lenisRef.current = lenis;
-
-    // Connect Lenis to GSAP's ticker for frame-perfect sync
-    function raf(time: number) {
-      lenis.raf(time * 1000);
-    }
-
-    gsap.ticker.add(raf);
-    gsap.ticker.lagSmoothing(0);
-
-    // Keep ScrollTrigger in sync with Lenis scroll position
-    lenis.on('scroll', ScrollTrigger.update);
-
-    return () => {
-      gsap.ticker.remove(raf);
-      lenis.destroy();
-    };
+    loadGsap();
   }, []);
 
   return <>{children}</>;

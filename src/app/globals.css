@@ -7,7 +7,7 @@
   --color-fg: #0E0E0C;
   --color-accent: #8B3A2A;
   --color-accent-hover: #C4614A;
-  --color-mid: #8C8880;
+  --color-mid: #A09A92;
   --color-dark: #111110;
   --color-surface: #EDEAE4;
   --color-border: #D9D5CE;
@@ -38,6 +38,7 @@
   --ease-cursor: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-transition: cubic-bezier(0.76, 0, 0.24, 1);
 }
+
 
 @theme inline {
   --color-bg: var(--color-bg);
@@ -79,6 +80,11 @@ body {
 ::selection {
   background: var(--color-accent);
   color: #fff;
+}
+
+/* ——— Image loading placeholder ——— */
+[class*="aspect-"] {
+  background: #1a1a18;
 }
 
 /* ——— Typography utilities ——— */
@@ -141,22 +147,16 @@ body {
   background: var(--color-divider);
 }
 
-/* ——— Smooth scroll body (Lenis) ——— */
+/* ——— Smooth scroll ——— */
 
-html.lenis, html.lenis body {
-  height: auto;
+html {
+  scroll-behavior: smooth;
 }
 
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* ——— Page transition overlay ——— */
@@ -245,4 +245,30 @@ html.lenis, html.lenis body {
 
 .line-reveal .line-inner {
   display: block;
+}
+
+/* ——— RTL support ——— */
+
+[dir="rtl"] body {
+  font-family: var(--font-body), 'Noto Sans Arabic', sans-serif;
+  font-size: calc(var(--size-body) + 2px);
+}
+
+[dir="rtl"] .text-label {
+  font-size: 13px;
+}
+
+[dir="rtl"] .text-hero,
+[dir="rtl"] .text-display,
+[dir="rtl"] .text-heading {
+  letter-spacing: 0;
+}
+
+[dir="rtl"] .text-label {
+  letter-spacing: 0.04em;
+}
+
+/* RTL marquee direction */
+[dir="rtl"] .animate-\[marquee_30s_linear_infinite\] {
+  animation-direction: reverse;
 }

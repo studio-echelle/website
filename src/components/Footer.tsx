@@ -1,59 +1,56 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/navigation';
+import { useTranslations, useLocale } from 'next-intl';
 
 const FOOTER_NAV = [
-  { href: '/about' as const, key: 'about' },
-  { href: '/projects' as const, key: 'projects' },
-  { href: '/services' as const, key: 'services' },
-  { href: '/contact' as const, key: 'contact' },
+  { href: '/about', key: 'about' },
+  { href: '/projects', key: 'projects' },
+  { href: '/services', key: 'services' },
+  { href: '/contact', key: 'contact' },
 ];
 
 export function Footer() {
   const t = useTranslations('nav');
   const tc = useTranslations('common');
+  const tf = useTranslations('footer');
+  const locale = useLocale();
+  const prefix = `/${locale}`;
 
   return (
     <footer className="bg-[var(--color-dark)] text-[var(--color-bg)]">
-      {/* Main footer */}
       <div className="container py-20 lg:py-28">
         <div className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-y-14 gap-x-[var(--gutter)]">
-          {/* Brand column */}
           <div className="col-span-4 lg:col-span-5">
-            <Link href="/">
+            <a href={prefix}>
               <span
                 className="text-[22px] lg:text-[28px] tracking-[0.1em] uppercase"
                 style={{ fontFamily: 'var(--font-display), serif', fontWeight: 300 }}
               >
                 Studio Échelle
               </span>
-            </Link>
+            </a>
             <p className="text-[15px] leading-relaxed text-[var(--color-mid)] mt-6 max-w-sm">
-              We design with love, for form, for material, and for the people
-              who live with our work.
+              {tf('tagline')}
             </p>
           </div>
 
-          {/* Navigation */}
           <div className="col-span-2 lg:col-span-2 lg:col-start-7">
-            <h4 className="text-label text-[var(--color-mid)] mb-5">Navigate</h4>
+            <h4 className="text-label text-[var(--color-mid)] mb-5">{tf('navigate')}</h4>
             <nav className="flex flex-col gap-3">
               {FOOTER_NAV.map(({ href, key }) => (
-                <Link
+                <a
                   key={key}
-                  href={href}
+                  href={`${prefix}${href}`}
                   className="text-[14px] text-[var(--color-bg)]/70 hover:text-[var(--color-accent-hover)] transition-colors duration-300"
                 >
                   {t(key)}
-                </Link>
+                </a>
               ))}
             </nav>
           </div>
 
-          {/* Contact */}
           <div className="col-span-2 lg:col-span-3 lg:col-start-10">
-            <h4 className="text-label text-[var(--color-mid)] mb-5">Contact</h4>
+            <h4 className="text-label text-[var(--color-mid)] mb-5">{tf('contact')}</h4>
             <div className="flex flex-col gap-3 text-[14px]">
               <a
                 href="mailto:hello@studioechelle.com"
@@ -71,7 +68,6 @@ export function Footer() {
                 The Pearl, Doha, Qatar
               </p>
 
-              {/* Socials */}
               <div className="flex gap-5 mt-3">
                 <a
                   href="https://instagram.com/studioechelle"
@@ -103,7 +99,6 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Bottom bar */}
       <div className="border-t border-[var(--color-mid)]/15">
         <div className="container py-6 flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-[12px] text-[var(--color-mid)]">

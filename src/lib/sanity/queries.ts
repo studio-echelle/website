@@ -1,9 +1,19 @@
 import { client } from './client';
 
+// Safe wrapper — returns fallback on any Sanity error
+async function safeFetch<T>(query: string, params?: Record<string, unknown>, fallback?: T): Promise<T> {
+  try {
+    const result = await client.fetch(query, params);
+    return result ?? (fallback as T);
+  } catch {
+    return fallback as T;
+  }
+}
+
 // ——— Projects ———
 
 export async function getAllProjects() {
-  return client.fetch(`
+  return safeFetch<unknown[]>(`
     *[_type == "project"] | order(year desc) {
       _id,
       title,
@@ -19,12 +29,11 @@ export async function getAllProjects() {
       summary,
       summary_ar
     }
-  `);
+  `, undefined, []);
 }
 
 export async function getProjectBySlug(slug: string) {
-  return client.fetch(
-    `
+  return safeFetch<unknown | null>(`
     *[_type == "project" && slug.current == $slug][0] {
       _id,
       title,
@@ -52,21 +61,19 @@ export async function getProjectBySlug(slug: string) {
         heroImage
       }
     }
-  `,
-    { slug },
-  );
+  `, { slug }, null);
 }
 
 export async function getProjectSlugs() {
-  return client.fetch(`
+  return safeFetch<string[]>(`
     *[_type == "project"].slug.current
-  `);
+  `, undefined, []);
 }
 
 // ——— Site Settings ———
 
 export async function getSiteSettings() {
-  return client.fetch(`
+  return safeFetch<unknown | null>(`
     *[_type == "siteSettings"][0] {
       studioName,
       tagline,
@@ -88,13 +95,13 @@ export async function getSiteSettings() {
       },
       stats
     }
-  `);
+  `, undefined, null);
 }
 
 // ——— Team ———
 
 export async function getTeamMembers() {
-  return client.fetch(`
+  return safeFetch<unknown[]>(`
     *[_type == "teamMember"] | order(order asc) {
       _id,
       name,
@@ -103,13 +110,13 @@ export async function getTeamMembers() {
       bio_ar,
       portrait
     }
-  `);
+  `, undefined, []);
 }
 
 // ——— Services ———
 
 export async function getServices() {
-  return client.fetch(`
+  return safeFetch<unknown[]>(`
     *[_type == "service"] | order(order asc) {
       _id,
       title,
@@ -118,5 +125,5 @@ export async function getServices() {
       description,
       description_ar
     }
-  `);
+  `, undefined, []);
 }

@@ -1,14 +1,13 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond, DM_Sans } from 'next/font/google';
+import { Cormorant_Garamond, DM_Sans, Noto_Sans_Arabic } from 'next/font/google';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { LenisProvider } from '@/components/LenisProvider';
 import { CustomCursor } from '@/components/CustomCursor';
-import { PageTransition } from '@/components/PageTransition';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { GridOverlay } from '@/components/GridOverlay';
+import { RouteCleanup } from '@/components/RouteCleanup';
 import '../globals.css';
 
 const cormorant = Cormorant_Garamond({
@@ -22,6 +21,13 @@ const dmSans = DM_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
   variable: '--font-dm-sans',
+  display: 'swap',
+});
+
+const notoArabic = Noto_Sans_Arabic({
+  subsets: ['arabic'],
+  weight: ['300', '400', '500', '700'],
+  variable: '--font-noto-arabic',
   display: 'swap',
 });
 
@@ -51,15 +57,14 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={locale === 'ar' ? 'rtl' : 'ltr'}
-      className={`${cormorant.variable} ${dmSans.variable}`}
+      className={`${cormorant.variable} ${dmSans.variable} ${notoArabic.variable}`}
       suppressHydrationWarning
     >
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <LenisProvider>
-            <GridOverlay />
+            <RouteCleanup />
             <CustomCursor />
-            <PageTransition />
             <Navigation />
             <main>{children}</main>
             <Footer />

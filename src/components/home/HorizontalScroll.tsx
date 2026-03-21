@@ -1,48 +1,57 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLocale } from 'next-intl';
+import { useGsap } from '@/lib/useGsap';
 
-gsap.registerPlugin(ScrollTrigger);
+const CLD = 'https://res.cloudinary.com/darx0pq1z/image/upload/f_auto,q_auto:good';
 
-const PANELS = [
+const FEATURED = [
   {
+    slug: 'lusail-villa',
+    title: 'Lusail Villa',
     category: 'Residential',
-    image:
-      'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1920&q=80&auto=format&fit=crop',
+    location: 'Lusail, Qatar',
+    image: `${CLD},w_1920/se/projects/lusail-villa/gallery/hero`,
     index: '01',
   },
   {
-    category: 'Commercial',
-    image:
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80&auto=format&fit=crop',
+    slug: 'mezami',
+    title: 'Mezami',
+    category: 'Hospitality',
+    location: 'Doha, Qatar',
+    image: `${CLD},w_1920/se/projects/mezami/gallery/hero`,
     index: '02',
   },
   {
-    category: 'Hospitality',
-    image:
-      'https://images.unsplash.com/photo-1559508551-44bff1de756b?w=1920&q=80&auto=format&fit=crop',
+    slug: 'private-welness-retreat',
+    title: 'Private Wellness Retreat',
+    category: 'Lifestyle',
+    location: 'Doha, Qatar',
+    image: `${CLD},w_1920/se/projects/private-welness-retreat/gallery/hero`,
     index: '03',
   },
 ];
 
 export function HorizontalScroll() {
+  const locale = useLocale();
+  const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const categoryRefs = useRef<(HTMLHeadingElement | null)[]>([]);
-  const lineRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    setMounted(true);
+  }, []);
+
+  useGsap((gsap, ScrollTrigger) => {
+    if (!mounted) return;
+    return gsap.context(() => {
       const panels = gsap.utils.toArray<HTMLElement>('.h-panel');
       if (panels.length === 0) return;
 
       const totalScroll = (panels.length - 1) * window.innerWidth;
 
-      // Main horizontal scroll
-      const scrollTween = gsap.to(panels, {
+      gsap.to(panels, {
         xPercent: -100 * (panels.length - 1),
         ease: 'none',
         scrollTrigger: {
@@ -52,99 +61,52 @@ export function HorizontalScroll() {
           end: () => '+=' + totalScroll,
         },
       });
-
-      // Per-panel animations
-      panels.forEach((panel, i) => {
-        const category = categoryRefs.current[i];
-        const line = lineRefs.current[i];
-        const imageWrap = imageRefs.current[i];
-
-        // Category text reveal
-        if (category) {
-          gsap.from(category, {
-            yPercent: 40,
-            opacity: 0,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: panel,
-              containerAnimation: i > 0 ? scrollTween : undefined,
-              start: i === 0 ? 'top 80%' : 'left 80%',
-              toggleActions: 'play none none reverse',
-            },
-          });
-        }
-
-        // Vertical line scale
-        if (line) {
-          gsap.from(line, {
-            scaleY: 0,
-            transformOrigin: 'bottom',
-            duration: 0.8,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: panel,
-              containerAnimation: i > 0 ? scrollTween : undefined,
-              start: i === 0 ? 'top 80%' : 'left 80%',
-              toggleActions: 'play none none reverse',
-            },
-          });
-        }
-
-        // Image parallax — subtle horizontal offset
-        if (imageWrap) {
-          gsap.fromTo(
-            imageWrap,
-            { xPercent: i === 0 ? 0 : 8 },
-            {
-              xPercent: i === panels.length - 1 ? 0 : -8,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: panel,
-                containerAnimation: i > 0 ? scrollTween : undefined,
-                start: 'left right',
-                end: 'right left',
-                scrub: true,
-              },
-            },
-          );
-        }
-      });
     }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+  }, [mounted]);
 
   return (
-    <div ref={containerRef} className="h-scroll-container overflow-hidden">
+    <div ref={containerRef} className="h-scroll-container overflow-hidden relative">
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none">
+        <span
+          style={{
+            fontFamily: 'var(--font-body), sans-serif',
+            fontSize: '10px',
+            fontWeight: 500,
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: 'rgba(245,242,237,0.4)',
+          }}
+        >
+          Scroll
+        </span>
+        <div className="w-px h-6 bg-[var(--color-accent)] opacity-60" />
+      </div>
       <div className="flex h-screen">
-        {PANELS.map((panel, i) => (
-          <div
-            key={panel.index}
-            className="h-panel relative w-screen h-screen flex-shrink-0"
+        {FEATURED.map((project) => (
+          <a
+            key={project.index}
+            href={`/${locale}/projects/${project.slug}`}
+            className="h-panel relative w-screen h-screen flex-shrink-0 block"
+            data-cursor="view"
           >
             {/* Full-bleed image */}
-            <div
-              ref={(el) => {
-                imageRefs.current[i] = el;
-              }}
-              className="absolute inset-[-8%] lg:inset-[-4%]"
-            >
+            <div className="absolute inset-0">
               <Image
-                src={panel.image}
-                alt={`${panel.category} project by Studio Échelle`}
+                src={project.image}
+                alt={project.title}
                 fill
                 className="object-cover"
-                sizes="120vw"
+                sizes="100vw"
               />
             </div>
 
-            {/* Dark overlay */}
+            {/* Dark gradient overlay */}
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(to right, rgba(14,14,12,0.85) 0%, rgba(14,14,12,0.3) 60%, rgba(14,14,12,0.7) 100%)',
+                  'linear-gradient(to top, rgba(14,14,12,0.8) 0%, rgba(14,14,12,0.1) 50%, rgba(14,14,12,0.3) 100%)',
               }}
             />
 
@@ -158,38 +120,54 @@ export function HorizontalScroll() {
                   color: 'rgba(140,136,128,0.6)',
                 }}
               >
-                {panel.index}
+                {project.index}
               </span>
             </div>
 
             {/* Content — bottom left */}
-            <div className="absolute bottom-[20%] left-[60px] z-10">
-              {/* Vertical terracotta line */}
-              <div
-                ref={(el) => {
-                  lineRefs.current[i] = el;
+            <div className="absolute bottom-[12%] left-[40px] lg:left-[60px] z-10 max-w-xl">
+              {/* Category tag */}
+              <p
+                className="text-[var(--color-accent)] mb-4"
+                style={{
+                  fontFamily: 'var(--font-body), sans-serif',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
                 }}
-                className="w-px h-[80px] bg-[var(--color-accent)] mb-6"
-              />
+              >
+                {project.category} — {project.location}
+              </p>
 
-              {/* Category */}
+              {/* Project title */}
               <h2
-                ref={(el) => {
-                  categoryRefs.current[i] = el;
-                }}
                 className="text-[var(--color-bg)]"
                 style={{
                   fontFamily: 'var(--font-display), serif',
                   fontWeight: 300,
-                  fontSize: 'clamp(96px, 11vw, 160px)',
-                  lineHeight: 0.95,
-                  letterSpacing: '-0.02em',
+                  fontSize: 'clamp(48px, 6vw, 80px)',
+                  lineHeight: 1.05,
+                  letterSpacing: '-0.01em',
                 }}
               >
-                {panel.category}
+                {project.title}
               </h2>
+
+              {/* View project hint */}
+              <p
+                className="text-[var(--color-bg)]/50 mt-6"
+                style={{
+                  fontFamily: 'var(--font-body), sans-serif',
+                  fontSize: '12px',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                View Project →
+              </p>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>

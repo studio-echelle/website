@@ -1,16 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useGsap } from '@/lib/useGsap';
+import { getGsap } from '@/lib/gsap';
 
 const SERVICE_KEYS = ['interior', 'architecture', 'landscape', 'fitout'] as const;
 
 export function Services() {
   const t = useTranslations('services');
+  const [mounted, setMounted] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const rowsRef = useRef<HTMLDivElement>(null);
   const descRefs = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -18,27 +17,15 @@ export function Services() {
   const arrowRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const rows = rowsRef.current?.children;
-      if (!rows) return;
-
-      gsap.from(Array.from(rows), {
-        y: 40,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power2.out',
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: rowsRef.current,
-          start: 'top 80%',
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    setMounted(true);
   }, []);
 
+  // No GSAP opacity animation on service rows — they render visible immediately.
+  // Previous gsap.from({ opacity: 0 }) with ScrollTrigger was leaving rows invisible.
+
   const handleEnter = useCallback((i: number) => {
+    const gsap = getGsap();
+    if (!gsap) return;
     const desc = descRefs.current[i];
     const name = nameRefs.current[i];
     const arrow = arrowRefs.current[i];
@@ -48,6 +35,8 @@ export function Services() {
   }, []);
 
   const handleLeave = useCallback((i: number) => {
+    const gsap = getGsap();
+    if (!gsap) return;
     const desc = descRefs.current[i];
     const name = nameRefs.current[i];
     const arrow = arrowRefs.current[i];
@@ -72,7 +61,6 @@ export function Services() {
             onMouseLeave={() => handleLeave(i)}
           >
             <div className="flex items-center gap-8 lg:gap-12">
-              {/* Number */}
               <span
                 className="text-[11px] tracking-[0.12em] uppercase font-medium text-[var(--color-accent)] shrink-0 w-[36px]"
                 style={{ fontFamily: 'var(--font-body), sans-serif' }}
@@ -80,7 +68,6 @@ export function Services() {
                 {String(i + 1).padStart(2, '0')}
               </span>
 
-              {/* Service name */}
               <h3
                 ref={(el) => {
                   nameRefs.current[i] = el;
@@ -96,7 +83,6 @@ export function Services() {
                 {t(`${key}.name`)}
               </h3>
 
-              {/* Description — slides in on hover */}
               <p
                 ref={(el) => {
                   descRefs.current[i] = el;
@@ -112,7 +98,6 @@ export function Services() {
                 {t(`${key}.description`)}
               </p>
 
-              {/* Arrow */}
               <span
                 ref={(el) => {
                   arrowRefs.current[i] = el;
@@ -125,7 +110,6 @@ export function Services() {
             </div>
           </div>
         ))}
-        {/* Bottom border on last row */}
         <div className="border-t border-white/[0.06]" />
       </div>
     </section>

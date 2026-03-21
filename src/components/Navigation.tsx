@@ -2,20 +2,19 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import { Link, usePathname, useRouter } from '@/i18n/navigation';
+import { usePathname } from 'next/navigation';
 
 const NAV_LINKS = [
-  { href: '/about' as const, key: 'about' },
-  { href: '/projects' as const, key: 'projects' },
-  { href: '/services' as const, key: 'services' },
-  { href: '/contact' as const, key: 'contact' },
+  { href: '/about', key: 'about' },
+  { href: '/projects', key: 'projects' },
+  { href: '/services', key: 'services' },
+  { href: '/contact', key: 'contact' },
 ];
 
 export function Navigation() {
   const t = useTranslations('nav');
   const locale = useLocale();
   const pathname = usePathname();
-  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -34,12 +33,11 @@ export function Navigation() {
     };
   }, [menuOpen]);
 
-  const switchLocale = useCallback(() => {
-    const next = locale === 'en' ? 'ar' : 'en';
-    router.replace(pathname, { locale: next });
-  }, [locale, pathname, router]);
-
   const closeMenu = useCallback(() => setMenuOpen(false), []);
+
+  const prefix = `/${locale}`;
+  const altLocale = locale === 'en' ? 'ar' : 'en';
+  const switchUrl = pathname.replace(`/${locale}`, `/${altLocale}`);
 
   return (
     <>
@@ -50,9 +48,8 @@ export function Navigation() {
             : ''
         }`}
       >
-        <div className="container flex items-center justify-between h-[80px]">
-          {/* Wordmark with terracotta dot */}
-          <Link href="/" className="relative z-50 flex items-center gap-2.5" onClick={closeMenu}>
+        <div className="flex items-center justify-between h-[80px]" style={{ paddingInline: '32px' }}>
+          <a href={prefix} className="relative z-50 flex items-center gap-2.5" onClick={closeMenu}>
             <span className="w-[4px] h-[4px] rounded-full bg-[var(--color-accent)] shrink-0" />
             <span
               className="text-[18px] lg:text-[20px] tracking-[0.1em] uppercase text-[var(--color-bg)]"
@@ -60,31 +57,28 @@ export function Navigation() {
             >
               Studio Échelle
             </span>
-          </Link>
+          </a>
 
-          {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-10">
             {NAV_LINKS.map(({ href, key }) => (
-              <Link
+              <a
                 key={key}
-                href={href}
+                href={`${prefix}${href}`}
                 className="text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--color-bg)]/60 hover:text-[var(--color-bg)] transition-colors duration-300 relative after:absolute after:bottom-[-4px] after:left-0 after:h-px after:bg-[var(--color-accent)] after:transition-[width] after:duration-300 after:w-0 hover:after:w-full"
               >
                 {t(key)}
-              </Link>
+              </a>
             ))}
 
-            {/* Language toggle */}
-            <button
-              onClick={switchLocale}
+            <a
+              href={switchUrl}
               className="text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--color-mid)] hover:text-[var(--color-bg)] transition-colors duration-300 ms-2"
               aria-label={locale === 'en' ? 'Switch to Arabic' : 'Switch to English'}
             >
               {locale === 'en' ? 'عربي' : 'EN'}
-            </button>
+            </a>
           </nav>
 
-          {/* Mobile hamburger */}
           <button
             className="lg:hidden relative z-50 w-10 h-10 flex flex-col justify-center items-center gap-[6px]"
             onClick={() => setMenuOpen((o) => !o)}
@@ -105,7 +99,6 @@ export function Navigation() {
         </div>
       </header>
 
-      {/* Mobile overlay */}
       <div
         className={`fixed inset-0 z-30 bg-[var(--color-fg)] transition-opacity duration-500 lg:hidden ${
           menuOpen
@@ -116,27 +109,24 @@ export function Navigation() {
       >
         <div className="flex flex-col items-center justify-center h-full gap-10">
           <nav className="flex flex-col items-center gap-8">
-            {[{ href: '/' as const, key: 'home' }, ...NAV_LINKS].map(({ href, key }) => (
-              <Link
+            {[{ href: '', key: 'home' }, ...NAV_LINKS].map(({ href, key }) => (
+              <a
                 key={key}
-                href={href}
+                href={`${prefix}${href ? href : ''}`}
                 className="text-display text-[var(--color-bg)] hover:text-[var(--color-accent)] transition-colors duration-300"
                 onClick={closeMenu}
               >
                 {t(key)}
-              </Link>
+              </a>
             ))}
           </nav>
 
-          <button
-            onClick={() => {
-              switchLocale();
-              closeMenu();
-            }}
+          <a
+            href={switchUrl}
             className="text-label text-[var(--color-mid)] hover:text-[var(--color-bg)] transition-colors duration-300 mt-4"
           >
             {locale === 'en' ? 'عربي' : 'English'}
-          </button>
+          </a>
         </div>
       </div>
     </>

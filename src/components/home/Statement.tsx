@@ -1,11 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useGsap } from '@/lib/useGsap';
 
 const STATS = [
   { value: 120, suffix: '+', key: 'projects' },
@@ -21,32 +18,23 @@ function formatNumber(n: number): string {
   return String(n);
 }
 
-function SplitWords({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
-  const words = text.split(' ');
-  return (
-    <span className={className} style={style}>
-      {words.map((word, i) => (
-        <span key={i} className="inline-block overflow-hidden align-top">
-          <span className="manifesto-word inline-block">
-            {word}
-          </span>
-          {i < words.length - 1 && '\u00A0'}
-        </span>
-      ))}
-    </span>
-  );
-}
-
 export function Statement() {
   const t = useTranslations('statement');
+  const [mounted, setMounted] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const manifestoRef = useRef<HTMLDivElement>(null);
   const extendedRef = useRef<HTMLParagraphElement>(null);
   const counterRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
+  const manifestoText = t('manifesto');
+
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Word-by-word reveal for manifesto
+    setMounted(true);
+  }, []);
+
+  useGsap((gsap, ScrollTrigger) => {
+    if (!mounted) return;
+    return gsap.context(() => {
       const words = manifestoRef.current?.querySelectorAll('.manifesto-word');
       if (words && words.length > 0) {
         gsap.from(words, {
@@ -91,9 +79,7 @@ export function Statement() {
         });
       });
     }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  }, [mounted]);
 
   return (
     <section
@@ -103,26 +89,47 @@ export function Statement() {
     >
       <div className="container">
         {/* Manifesto */}
-        <div className="max-w-5xl mx-auto text-center mb-24 lg:mb-36">
+        <div style={{ maxWidth: '64rem', marginLeft: 'auto', textAlign: 'right', marginBottom: 'clamp(96px, 8vw, 144px)' }}>
           <h2 ref={manifestoRef}>
-            <SplitWords
-              text={t('manifesto')}
-              style={{
-                fontFamily: 'var(--font-display), serif',
-                fontWeight: 300,
-                fontSize: 'clamp(36px, 4vw, 64px)',
-                lineHeight: 1.2,
-                letterSpacing: '0.01em',
-              }}
-            />
+            {mounted ? (
+              // Client: split into word spans for GSAP animation
+              <span
+                style={{
+                  fontFamily: 'var(--font-display), serif',
+                  fontWeight: 300,
+                  fontSize: 'clamp(36px, 4vw, 64px)',
+                  lineHeight: 1.2,
+                  letterSpacing: '0.01em',
+                }}
+              >
+                {manifestoText.split(' ').map((word, i) => (
+                  <span key={i} className="inline-block overflow-hidden align-top">
+                    <span className="manifesto-word inline-block">
+                      {word}
+                    </span>
+                    {i < manifestoText.split(' ').length - 1 && '\u00A0'}
+                  </span>
+                ))}
+              </span>
+            ) : (
+              // Server: render plain text — identical text content, no span mismatch
+              <span
+                style={{
+                  fontFamily: 'var(--font-display), serif',
+                  fontWeight: 300,
+                  fontSize: 'clamp(36px, 4vw, 64px)',
+                  lineHeight: 1.2,
+                  letterSpacing: '0.01em',
+                }}
+              >
+                {manifestoText}
+              </span>
+            )}
           </h2>
           <p
             ref={extendedRef}
-            className="mt-8 lg:mt-10 text-[var(--color-mid)] max-w-2xl mx-auto"
-            style={{
-              fontSize: 'clamp(17px, 1.4vw, 21px)',
-              lineHeight: 1.8,
-            }}
+            className="text-[var(--color-mid)]"
+            style={{ marginTop: 'clamp(32px, 3vw, 40px)', maxWidth: '42rem', marginLeft: 'auto', fontSize: 'clamp(17px, 1.4vw, 21px)', lineHeight: 1.8 }}
           >
             {t('extended')}
           </p>
@@ -139,6 +146,10 @@ export function Statement() {
                   fontWeight: 300,
                   fontSize: 'clamp(64px, 7vw, 96px)',
                   lineHeight: 1,
+                  height: 'clamp(64px, 7vw, 96px)',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  justifyContent: 'center',
                 }}
               >
                 <span
@@ -150,7 +161,7 @@ export function Statement() {
                 </span>
                 {stat.suffix}
               </div>
-              <p className="text-[11px] tracking-[0.12em] uppercase font-medium text-[var(--color-mid)] mt-4">
+              <p className="text-[11px] tracking-[0.12em] uppercase font-medium text-[var(--color-mid)] mt-4 whitespace-nowrap">
                 {t(`stats.${stat.key}`)}
               </p>
             </div>
